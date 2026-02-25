@@ -1,5 +1,5 @@
 /* ============================
-   基本レイアウト
+   基本レイアウト（PC用）
 ============================ */
 body {
   margin: 0;
@@ -10,7 +10,7 @@ body {
   height: 100vh;
   font-family: system-ui, sans-serif;
   color: #fff;
-  overflow-x: hidden; /* スマホで横スクロール防止 */
+  overflow-x: hidden;
 }
 
 /* ゲーム全体を包む固定サイズの箱 */
@@ -212,14 +212,18 @@ body {
 ============================ */
 @media (max-width: 480px) {
 
-  /* 中央寄せを解除して左上に固定 */
+  /* PC の中央寄せを完全解除 */
   body {
-    justify-content: flex-start;
-    align-items: flex-start;
+    display: block;
+    margin: 0;
+    padding: 0;
   }
 
-  /* wrapper を横幅いっぱいに拡大（唯一の transform） */
+  /* wrapper を左上に固定してから拡大 */
   #game-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
     transform: scale(calc(100vw / 300));
     transform-origin: top left;
   }
