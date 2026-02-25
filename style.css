@@ -212,6 +212,7 @@ body {
 ============================ */
 @media (max-width: 480px) {
 
+  /* body のレイアウトを完全リセット */
   html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -221,13 +222,20 @@ body {
     overflow-x: hidden !important;
   }
 
+  /* ゲーム盤そのものを拡大（これが最重要） */
+  #game {
+    transform: scale(calc(100vw / 300)) !important;
+    transform-origin: top left !important;
+    width: 300px;
+    height: 400px;
+  }
+
+  /* wrapper は位置だけ決める（サイズは固定） */
   #game-wrapper {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-
-    /* transform を最優先で適用 */
-    transform: scale(calc(100vw / 300)) !important;
-    transform-origin: top left !important;
+    width: 300px;
+    height: 400px;
   }
 }
