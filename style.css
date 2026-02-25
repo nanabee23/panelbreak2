@@ -212,11 +212,12 @@ body {
 ============================ */
 @media (max-width: 480px) {
 
-  /* PC の中央寄せを完全解除 */
+  /* PC の中央寄せレイアウトを完全に解除 */
   body {
-    display: block;
     margin: 0;
     padding: 0;
+    display: block !important;   /* ← これが最重要 */
+    height: auto !important;
   }
 
   /* wrapper を左上に固定してから拡大 */
