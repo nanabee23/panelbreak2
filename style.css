@@ -49,7 +49,7 @@ body {
 ============================ */
 #hud-top {
   position: absolute;
-  top: -80px;       /* JS がスケール調整 */
+  top: 0px;       /* JS がスケール調整 */
   left: 0;          /* ★ 中央寄せ禁止 */
   transform: none;  /* ★ translateX禁止 */
   width: 100%;      /* ★ ゲーム幅に合わせる */
@@ -74,7 +74,7 @@ body {
 ============================ */
 #combo-ui {
   position: absolute;
-  top: -40px;       /* JS がスケール調整 */
+  top: 40px;       /* JS がスケール調整 */
   left: 0;          /* ★ 中央寄せ禁止 */
   transform: none;  /* ★ translateX禁止 */
   width: 100%;      /* ★ ゲーム幅に合わせる */

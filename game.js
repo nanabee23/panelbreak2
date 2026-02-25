@@ -41,8 +41,8 @@ function setupScale() {
   game.style.height = `${BASE_H * scale}px`;
 
   // HUD の位置もスケール
-  hudTop.style.top = `${-80 * scale}px`;
-  comboUI.style.top = `${-40 * scale}px`;
+  hudTop.style.top = `${0 * scale}px`;
+  comboUI.style.top = `${40 * scale}px`;
 }
 
 /* 既存パネルの再スケール（これがズレ解消の決定打） */
@@ -273,8 +273,8 @@ function endGame() {
 
 init();
 // ★ HUD の位置を再スケール（これが見えない原因の本命）
-hudTop.style.top = `${-80 * scale}px`;
-comboUI.style.top = `${-40 * scale}px`;
+hudTop.style.top = `${0 * scale}px`;
+comboUI.style.top = `${40 * scale}px`;
 
 
 startGameTimer();
@@ -407,6 +407,11 @@ function swapBlocks(x1, y1, x2, y2) {
   b2.style.left = `${x1 * SIZE}px`;
   b2.style.top  = `${y1 * SIZE}px`;
 }
+
+
+
+
+
 /* 入力処理（ドラッグ or タップ回転） */
 
 let startX = 0, startY = 0;
