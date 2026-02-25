@@ -90,8 +90,12 @@ function rotateState(s) {
 function createBlock(x, y) {
   const div = document.createElement("div");
   div.className = "block";
-  div.style.left = `${x * SIZE}px`;
-  div.style.top = `${y * SIZE}px`;
+
+  const isMobile = window.innerWidth <= 480;
+  const scale = isMobile ? (window.innerWidth / 300) : 1;
+
+  div.style.left = `${x * SIZE * scale}px`;
+  div.style.top = `${y * SIZE * scale}px`;
 
   let state = [2, 0, 1, 0];
   let rot = [0, 90, 180, 270][Math.floor(Math.random() * 4)];
@@ -112,7 +116,6 @@ function createBlock(x, y) {
 
   return div;
 }
-
 /* 2×2 ひし形判定 */
 function check2x2(x, y) {
   if (x < 0 || x >= COLS - 1 || y < 0 || y >= ROWS - 1) return false;
