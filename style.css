@@ -1,8 +1,5 @@
-body {
-  background: red !important;
-}
 /* ============================
-   基本レイアウト（PC用）
+   PC 基本レイアウト
 ============================ */
 body {
   margin: 0;
@@ -10,20 +7,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; /* ← スマホでは解除する */
   font-family: system-ui, sans-serif;
   color: #fff;
   overflow-x: hidden;
 }
 
-/* ゲーム全体を包む固定サイズの箱 */
+/* ゲーム全体の箱（固定サイズ） */
 #game-wrapper {
   position: relative;
   width: 300px;
   height: 400px;
 }
 
-/* ゲーム盤（固定サイズ） */
+/* ゲーム盤 */
 #game {
   position: relative;
   width: 300px;
@@ -35,9 +32,7 @@ body {
   touch-action: none;
 }
 
-/* ============================
-   HUD
-============================ */
+/* HUD */
 #hud-top {
   position: absolute;
   top: -80px;
@@ -45,26 +40,20 @@ body {
   transform: translateX(-50%);
   display: flex;
   gap: 40px;
-  align-items: baseline;
-  justify-content: center;
 }
 
 #score {
   font-size: 28px;
   font-weight: bold;
-  text-shadow: 0 0 8px #000;
 }
 
 #timer {
   font-size: 24px;
   font-weight: bold;
-  text-shadow: 0 0 8px #000;
   color: #ffdf6b;
 }
 
-/* ============================
-   連鎖UI
-============================ */
+/* 連鎖UI */
 #combo-ui {
   position: absolute;
   left: 50%;
@@ -72,13 +61,11 @@ body {
   transform: translateX(-50%);
   width: 260px;
   text-align: center;
-  pointer-events: none;
 }
 
 #combo-text {
   font-size: 22px;
   font-weight: bold;
-  text-shadow: 0 0 6px #000;
   height: 26px;
 }
 
@@ -95,86 +82,18 @@ body {
   width: 0%;
   height: 100%;
   background: linear-gradient(90deg, #6cf, #f6f);
-  border-radius: 5px;
   transition: width linear;
 }
 
-/* ============================
-   パネル（ガラス風）
-============================ */
+/* パネル */
 .block {
   width: 50px;
   height: 50px;
   position: absolute;
-  transform-origin: center center;
   transition: transform 0.2s, top 0.2s, left 0.2s;
-  filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
 }
 
-.block::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.35),
-    rgba(255,255,255,0.05) 40%,
-    rgba(255,255,255,0) 60%
-  );
-  pointer-events: none;
-}
-
-.block::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.12) 0px,
-      rgba(255,255,255,0.12) 2px,
-      rgba(255,255,255,0) 3px
-    );
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-/* 三角形 */
-.tri1 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-top: 50px solid #0a3d62;
-  border-right: 50px solid transparent;
-}
-
-.tri2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-bottom: 50px solid #60a3bc;
-  border-left: 50px solid transparent;
-}
-
-/* 割れエフェクト */
-.crack {
-  animation: crack 0.35s ease-out forwards;
-  filter: drop-shadow(0 0 10px #8cf);
-}
-
-@keyframes crack {
-  0%   { transform: scale(1) rotate(var(--angle)); opacity: 1; }
-  40%  { transform: scale(1.4) rotate(var(--angle)); opacity: 1; }
-  100% { transform: scale(2.0) rotate(var(--angle)); opacity: 0; }
-}
-
-/* ============================
-   ゲームオーバー
-============================ */
+/* ゲームオーバー */
 #game-over-overlay {
   position: absolute;
   inset: 0;
@@ -193,52 +112,29 @@ body {
   pointer-events: auto;
 }
 
-#game-over-text {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-#final-score-label {
-  font-size: 18px;
-  opacity: 0.8;
-}
-
-#final-score-value {
-  font-size: 28px;
-  font-weight: bold;
-  margin-top: 4px;
-}
-
 /* ============================
-   スマホ拡大（横幅いっぱい）
+   スマホ版（横幅いっぱい）
 ============================ */
 @media (max-width: 480px) {
 
-  /* body のレイアウトを完全リセット */
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
+  /* ★ 最重要：body の高さ固定を解除 ★ */
+  body {
     height: auto !important;
     display: block !important;
-    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* ゲーム盤そのものを拡大（これが最重要） */
-  #game {
-    transform: scale(calc(100vw / 300)) !important;
-    transform-origin: top left !important;
-    width: 300px;
-    height: 400px;
-  }
-
-  /* wrapper は位置だけ決める（サイズは固定） */
+  /* wrapper を左上に固定 */
   #game-wrapper {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 300px;
-    height: 400px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* ★ ゲーム盤を直接拡大（確実に効く） ★ */
+  #game {
+    transform: scale(calc(100vw / 300));
+    transform-origin: top left;
   }
 }
