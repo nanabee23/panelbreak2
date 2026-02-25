@@ -1,6 +1,4 @@
-/* ============================
-   全体レイアウト
-============================ */
+/* 全体レイアウト */
 body {
   margin: 0;
   background: #222;
@@ -9,12 +7,14 @@ body {
   align-items: center;
   height: 100vh;
   font-family: system-ui, sans-serif;
+  color: #fff;
 }
 
 #game-wrapper {
   position: relative;
 }
 
+/* ゲーム盤 */
 #game {
   position: relative;
   width: 300px;
@@ -23,25 +23,35 @@ body {
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  touch-action: none;
 }
 
-/* ============================
-   スコア表示
-============================ */
-#score {
+/* HUD（スコア＋タイマー） */
+#hud-top {
   position: absolute;
   top: -80px;
   left: 50%;
   transform: translateX(-50%);
-  color: #fff;
+  display: flex;
+  gap: 40px;
+  align-items: baseline;
+  justify-content: center;
+}
+
+#score {
   font-size: 28px;
   font-weight: bold;
   text-shadow: 0 0 8px #000;
 }
 
-/* ============================
-   連鎖UI
-============================ */
+#timer {
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 8px #000;
+  color: #ffdf6b;
+}
+
+/* 連鎖UI */
 #combo-ui {
   position: absolute;
   left: 50%;
@@ -49,7 +59,6 @@ body {
   transform: translateX(-50%);
   width: 260px;
   text-align: center;
-  color: #fff;
   pointer-events: none;
 }
 
@@ -77,9 +86,7 @@ body {
   transition: width linear;
 }
 
-/* ============================
-   パネル（ガラス風）
-============================ */
+/* パネル（ガラス風） */
 .block {
   width: 50px;
   height: 50px;
@@ -119,16 +126,14 @@ body {
   pointer-events: none;
 }
 
-/* ============================
-   三角形（色はそのまま）
-============================ */
+/* 三角形 */
 .tri1 {
   position: absolute;
   top: 0;
   left: 0;
   width: 0;
   height: 0;
-  border-top: 50px solid #0a3d62; /* 紺 */
+  border-top: 50px solid #0a3d62;
   border-right: 50px solid transparent;
 }
 
@@ -138,13 +143,11 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-bottom: 50px solid #60a3bc; /* 水色 */
+  border-bottom: 50px solid #60a3bc;
   border-left: 50px solid transparent;
 }
 
-/* ============================
-   割れるエフェクト（強化版）
-============================ */
+/* 割れエフェクト */
 .crack {
   animation: crack 0.35s ease-out forwards;
   filter: drop-shadow(0 0 10px #8cf);
@@ -154,4 +157,40 @@ body {
   0%   { transform: scale(1) rotate(var(--angle)); opacity: 1; }
   40%  { transform: scale(1.4) rotate(var(--angle)); opacity: 1; }
   100% { transform: scale(2.0) rotate(var(--angle)); opacity: 0; }
+}
+
+/* ゲームオーバーオーバーレイ */
+#game-over-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+#game-over-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#game-over-text {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+#final-score-label {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+#final-score-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 4px;
 }
