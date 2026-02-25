@@ -194,21 +194,24 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
-/* スマホでゲーム盤を画面幅いっぱいに拡大 */
+/* スマホでパネルを画面幅いっぱいに拡大 */
 @media (max-width: 480px) {
 
-  /* ゲーム盤の実寸（ロジック用）はそのまま */
+  /* ゲーム盤の固定サイズはそのまま */
   #game {
     width: 300px;
     height: 400px;
-    transform: scale(calc(100vw / 300));
+    position: relative;
+  }
+
+  /* パネル全体を拡大（これが最重要） */
+  #game .block {
+    transform: scale(calc(100vw / 300)) translateZ(0);
     transform-origin: top left;
   }
 
-  /* wrapper は拡大しない（中身だけ拡大する） */
-  #game-wrapper {
-    width: 300px;
-    height: 400px;
-    overflow: visible; /* 重要：拡大後のはみ出しを許可 */
+  /* パネルの位置計算は JS の left/top のまま使う */
+  #game {
+    overflow: visible;
   }
 }
