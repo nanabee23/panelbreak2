@@ -194,10 +194,19 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
-/* スマホで自動拡大 */
+/* スマホでゲーム盤を画面幅にフィットさせる */
 @media (max-width: 480px) {
+
+  /* wrapper に幅を与える（これが必須） */
   #game-wrapper {
+    width: 300px;
+    height: 400px;
     transform: scale(calc(100vw / 300));
     transform-origin: top center;
+  }
+
+  /* ゲーム盤の位置調整（必要なら） */
+  #game {
+    margin: 0 auto;
   }
 }
