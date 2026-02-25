@@ -229,3 +229,8 @@ body {
     transform-origin: top left;
   }
 }
+html {
+  width: 100%;
+  height: auto;
+}
+
