@@ -3,28 +3,40 @@
 ============================ */
 body {
   margin: 0;
+  padding: 0;
   background: #222;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   font-family: system-ui, sans-serif;
   color: #fff;
   overflow: hidden;
+  display: block;      /* ★ flex禁止 */
+  height: auto;        /* ★ 100vh禁止 */
+}
+
+/* outer は座標系を壊さないように固定 */
+#outer {
+  margin: 0;
+  padding: 0;
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  transform: none;
 }
 
 /* ゲーム全体の箱（JS がサイズを上書きする） */
 #game-wrapper {
-  position: relative;
-  width: 300px;   /* JS が上書き */
-  height: 400px;  /* JS が上書き */
+  position: absolute;   /* ★ 左上固定（スマホでもPCでも） */
+  top: 0;
+  left: 0;
+  width: 300px;         /* JS が上書き */
+  height: 400px;        /* JS が上書き */
 }
 
 /* ゲーム盤（JS がサイズを上書きする） */
 #game {
   position: relative;
-  width: 300px;   /* JS が上書き */
-  height: 400px;  /* JS が上書き */
+  width: 300px;
+  height: 400px;
   background: #111;
   overflow: hidden;
   border-radius: 8px;
@@ -37,10 +49,12 @@ body {
 ============================ */
 #hud-top {
   position: absolute;
-  top: -80px; /* JS がスケールに合わせて調整する */
-  left: 50%;
-  transform: translateX(-50%);
+  top: -80px;       /* JS がスケール調整 */
+  left: 0;          /* ★ 中央寄せ禁止 */
+  transform: none;  /* ★ translateX禁止 */
+  width: 100%;      /* ★ ゲーム幅に合わせる */
   display: flex;
+  justify-content: center;
   gap: 40px;
 }
 
@@ -60,10 +74,10 @@ body {
 ============================ */
 #combo-ui {
   position: absolute;
-  left: 50%;
-  top: -40px; /* JS がスケールに合わせて調整する */
-  transform: translateX(-50%);
-  width: 260px;
+  top: -40px;       /* JS がスケール調整 */
+  left: 0;          /* ★ 中央寄せ禁止 */
+  transform: none;  /* ★ translateX禁止 */
+  width: 100%;      /* ★ ゲーム幅に合わせる */
   text-align: center;
 }
 
@@ -90,7 +104,7 @@ body {
 }
 
 /* ============================
-   パネル（JS がサイズを上書きする）
+   パネル
 ============================ */
 .block {
   position: absolute;
@@ -99,7 +113,6 @@ body {
   filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
 }
 
-/* ガラス光沢 */
 .block::after {
   content: "";
   position: absolute;
@@ -113,7 +126,6 @@ body {
   pointer-events: none;
 }
 
-/* ガラス模様 */
 .block::before {
   content: "";
   position: absolute;
@@ -129,7 +141,6 @@ body {
   pointer-events: none;
 }
 
-/* 三角形（JS がサイズを上書きする） */
 .tri1,
 .tri2 {
   position: absolute;
@@ -176,52 +187,16 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
-@media (max-width: 480px) {
-  body {
-    display: block;
-    height: auto;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
 
-  #game-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-}
-@media (max-width: 480px) {
-  body {
-    margin: 0;
-    padding: 0;
-    display: block;        /* ← 中央寄せを解除 */
-    height: auto;
-    overflow: hidden;
-  }
-
-  #game-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;               /* ← 画面左上に固定（最重要） */
-  }
-}
-
-#outer {
-  margin: 0;
-  padding: 0;
-  position: static !important;
-  display: block !important;
-  width: auto !important;
-  height: auto !important;
-  transform: none !important;
-}
-
+/* ============================
+   スマホ用（追加の調整は不要）
+============================ */
 @media (max-width: 480px) {
   body {
     margin: 0;
     padding: 0;
     display: block !important;
-    height: auto;
+    height: auto !important;
     overflow: hidden;
   }
 
@@ -234,8 +209,8 @@ body {
   }
 
   #game-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
   }
 }
