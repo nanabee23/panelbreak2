@@ -1,4 +1,6 @@
-/* PC 基本レイアウト */
+/* ============================
+   基本レイアウト（PC/スマホ共通）
+============================ */
 body {
   margin: 0;
   background: #222;
@@ -8,10 +10,10 @@ body {
   height: 100vh;
   font-family: system-ui, sans-serif;
   color: #fff;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-/* ゲーム全体の箱 */
+/* ゲーム全体の箱（固定サイズ） */
 #game-wrapper {
   position: relative;
   width: 300px;
@@ -30,36 +32,190 @@ body {
   touch-action: none;
 }
 
-/* スマホ版（transform を使わず実サイズで拡大） */
+/* ============================
+   HUD
+============================ */
+#hud-top {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 40px;
+}
+
+#score {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#timer {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffdf6b;
+}
+
+/* ============================
+   連鎖UI
+============================ */
+#combo-ui {
+  position: absolute;
+  left: 50%;
+  top: -40px;
+  transform: translateX(-50%);
+  width: 260px;
+  text-align: center;
+}
+
+#combo-text {
+  font-size: 22px;
+  font-weight: bold;
+  height: 26px;
+}
+
+#combo-gauge {
+  margin: 4px auto 0;
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#combo-gauge-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #6cf, #f6f);
+  transition: width linear;
+}
+
+/* ============================
+   パネル（ガラス風）
+============================ */
+.block {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  transform-origin: center center;
+  transition: transform 0.2s, top 0.2s, left 0.2s;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
+}
+
+.block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.35),
+    rgba(255,255,255,0.05) 40%,
+    rgba(255,255,255,0) 60%
+  );
+  pointer-events: none;
+}
+
+.block::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.12) 0px,
+      rgba(255,255,255,0.12) 2px,
+      rgba(255,255,255,0) 3px
+    );
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* 三角形 */
+.tri1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 50px solid #0a3d62;
+  border-right: 50px solid transparent;
+}
+
+.tri2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 50px solid #60a3bc;
+  border-left: 50px solid transparent;
+}
+
+/* 割れエフェクト */
+.crack {
+  animation: crack 0.35s ease-out forwards;
+  filter: drop-shadow(0 0 10px #8cf);
+}
+
+@keyframes crack {
+  0%   { transform: scale(1) rotate(var(--angle)); opacity: 1; }
+  40%  { transform: scale(1.4) rotate(var(--angle)); opacity: 1; }
+  100% { transform: scale(2.0) rotate(var(--angle)); opacity: 0; }
+}
+
+/* ============================
+   ゲームオーバー
+============================ */
+#game-over-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+#game-over-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#game-over-text {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+#final-score-label {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+#final-score-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+/* ============================
+   スマホ版（中央に固定）
+============================ */
 @media (max-width: 480px) {
 
   body {
-    height: auto;
-    display: block;
-    margin: 0;
-    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* スマホ幅に合わせて実サイズを拡大 */
+  /* スマホでも 300×400 のまま中央に表示 */
   #game-wrapper,
   #game {
-    width: 100vw;
-    height: calc(100vw * (400 / 300)); /* 4:3 の比率維持 */
-  }
-
-  /* パネルも自動で拡大されるように rem 化 */
-  .block {
-    width: calc(50px * (100vw / 300));
-    height: calc(50px * (100vw / 300));
-  }
-
-  .tri1 {
-    border-top-width: calc(50px * (100vw / 300));
-    border-right-width: calc(50px * (100vw / 300));
-  }
-
-  .tri2 {
-    border-bottom-width: calc(50px * (100vw / 300));
-    border-left-width: calc(50px * (100vw / 300));
+    width: 300px;
+    height: 400px;
   }
 }
