@@ -190,3 +190,18 @@ body {
     left: 0;
   }
 }
+@media (max-width: 480px) {
+  body {
+    margin: 0;
+    padding: 0;
+    display: block;        /* ← 中央寄せを解除 */
+    height: auto;
+    overflow: hidden;
+  }
+
+  #game-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;               /* ← 画面左上に固定（最重要） */
+  }
+}
