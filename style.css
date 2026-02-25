@@ -194,19 +194,22 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
-/* スマホでゲーム盤を画面幅にフィットさせる */
+/* スマホでゲーム盤を画面幅いっぱいに拡大 */
 @media (max-width: 480px) {
 
-  /* wrapper に幅を与える（これが必須） */
-  #game-wrapper {
-    width: 300px;
-    height: 400px;
-    transform: scale(calc(100vw / 300));
-    transform-origin: top center;
+  #game {
+    width: 100vw;
+    height: calc(100vw * (400 / 300)); /* 元の縦横比 300×400 を維持 */
   }
 
-  /* ゲーム盤の位置調整（必要なら） */
-  #game {
-    margin: 0 auto;
+  #game-wrapper {
+    width: 100vw;
+    height: calc(100vw * (400 / 300));
+  }
+
+  /* HUD の位置調整（必要なら） */
+  #hud-top {
+    top: -60px;
+    transform: translateX(-50%) scale(0.9);
   }
 }
