@@ -273,6 +273,11 @@ function endGame() {
 
 init();
 rescaleAllBlocks();  // ← これがズレ解消の本命
+// ★ HUD の位置を再スケール（これが見えない原因の本命）
+hudTop.style.top = `${-80 * scale}px`;
+comboUI.style.top = `${-40 * scale}px`;
+
+
 startGameTimer();
 
 /* 連鎖ゲージ開始 */
