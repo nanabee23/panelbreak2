@@ -1,9 +1,16 @@
-/* PanelBreak game.js（制限時間100秒版） */
+/* PanelBreak game.js（スマホ横幅いっぱい対応・制限時間60秒版） */
 
 const COLS = 6;
 const ROWS = 8;
-const SIZE = 50;
 
+const BASE_SIZE = 50;   // 元の1パネルサイズ
+const BASE_W = 300;     // 元の盤面幅
+const BASE_H = 400;     // 元の盤面高さ
+
+let SIZE = BASE_SIZE;   // 実際に使うパネルサイズ（スケール後）
+
+/* DOM */
+const gameWrapper = document.getElementById("game-wrapper");
 const game = document.getElementById("game");
 const comboText = document.getElementById("combo-text");
 const comboGaugeFill = document.getElementById("combo-gauge-fill");
@@ -11,7 +18,37 @@ const scoreUI = document.getElementById("score");
 const timerUI = document.getElementById("timer");
 const gameOverOverlay = document.getElementById("game-over-overlay");
 const finalScoreValue = document.getElementById("final-score-value");
+const hudTop = document.getElementById("hud-top");
+const comboUI = document.getElementById("combo-ui");
 
+/* スマホ用スケール */
+let scale = 1;
+
+function setupScale() {
+  const isMobile = window.innerWidth <= 480;
+
+  if (isMobile) {
+    scale = window.innerWidth / BASE_W; // 横幅いっぱい
+  } else {
+    scale = 1; // PC はそのまま
+  }
+
+  SIZE = BASE_SIZE * scale;
+
+  // 盤面サイズ
+  gameWrapper.style.width = `${BASE_W * scale}px`;
+  gameWrapper.style.height = `${BASE_H * scale}px`;
+  game.style.width = `${BASE_W * scale}px`;
+  game.style.height = `${BASE_H * scale}px`;
+
+  // HUD の位置もスケール
+  hudTop.style.top = `${-80 * scale}px`;
+  comboUI.style.top = `${-40 * scale}px`;
+}
+
+setupScale();
+
+/* ゲーム状態 */
 let grid = [];
 let busy = false;
 
@@ -91,11 +128,11 @@ function createBlock(x, y) {
   const div = document.createElement("div");
   div.className = "block";
 
-  const isMobile = window.innerWidth <= 480;
-  const scale = isMobile ? (window.innerWidth / 300) : 1;
-
-  div.style.left = `${x * SIZE * scale}px`;
-  div.style.top = `${y * SIZE * scale}px`;
+  // スケール後の座標とサイズ
+  div.style.left = `${x * SIZE}px`;
+  div.style.top = `${y * SIZE}px`;
+  div.style.width = `${SIZE}px`;
+  div.style.height = `${SIZE}px`;
 
   let state = [2, 0, 1, 0];
   let rot = [0, 90, 180, 270][Math.floor(Math.random() * 4)];
@@ -109,13 +146,20 @@ function createBlock(x, y) {
 
   const t1 = document.createElement("div");
   t1.className = "tri1";
+  t1.style.borderTop = `${SIZE}px solid #0a3d62`;
+  t1.style.borderRight = `${SIZE}px solid transparent`;
+
   const t2 = document.createElement("div");
   t2.className = "tri2";
+  t2.style.borderBottom = `${SIZE}px solid #60a3bc`;
+  t2.style.borderLeft = `${SIZE}px solid transparent`;
+
   div.appendChild(t1);
   div.appendChild(t2);
 
   return div;
 }
+
 /* 2×2 ひし形判定 */
 function check2x2(x, y) {
   if (x < 0 || x >= COLS - 1 || y < 0 || y >= ROWS - 1) return false;
@@ -176,9 +220,8 @@ function updateTimer() {
     endGame();
     gameOverOverlay.addEventListener("click", () => {
       if (!gameEnded) return;
-      location.reload();   // ページを再読み込みしてリスタート
+      location.reload();
     });
-
   }
   timerUI.textContent = timeLeft.toFixed(1);
 }
@@ -204,6 +247,7 @@ function endGame() {
 
 init();
 startGameTimer();
+
 /* 連鎖ゲージ開始 */
 function startComboGauge() {
   if (comboTimer) clearTimeout(comboTimer);
@@ -401,9 +445,10 @@ function pointerEnd(x, y) {
     b.dataset.step = String(step);
 
     let rot = parseInt(b.dataset.rot, 10) || 0;
-    rot += 90;               // 常に +90°（時計回り）
+    rot += 90;
     b.dataset.rot = rot;
     b.style.transform = `rotate(${rot}deg)`;
+
     setTimeout(() => resolveForCells([[startCellX, startCellY]]), 250);
   }
 }
@@ -438,4 +483,3 @@ game.addEventListener("touchend", e => {
   const t = e.changedTouches[0];
   pointerEnd(t.clientX, t.clientY);
 }, { passive: false });
-

@@ -13,18 +13,18 @@ body {
   overflow: hidden;
 }
 
-/* ゲーム全体の箱（固定サイズ） */
+/* ゲーム全体の箱（JS がサイズを上書きする） */
 #game-wrapper {
   position: relative;
-  width: 300px;
-  height: 400px;
+  width: 300px;   /* JS が上書き */
+  height: 400px;  /* JS が上書き */
 }
 
-/* ゲーム盤 */
+/* ゲーム盤（JS がサイズを上書きする） */
 #game {
   position: relative;
-  width: 300px;
-  height: 400px;
+  width: 300px;   /* JS が上書き */
+  height: 400px;  /* JS が上書き */
   background: #111;
   overflow: hidden;
   border-radius: 8px;
@@ -33,11 +33,11 @@ body {
 }
 
 /* ============================
-   HUD
+   HUD（ゲーム盤の上に重ねる）
 ============================ */
 #hud-top {
   position: absolute;
-  top: -80px;
+  top: -80px; /* JS がスケールに合わせて調整する */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -61,7 +61,7 @@ body {
 #combo-ui {
   position: absolute;
   left: 50%;
-  top: -40px;
+  top: -40px; /* JS がスケールに合わせて調整する */
   transform: translateX(-50%);
   width: 260px;
   text-align: center;
@@ -90,17 +90,16 @@ body {
 }
 
 /* ============================
-   パネル（ガラス風）
+   パネル（JS がサイズを上書きする）
 ============================ */
 .block {
-  width: 50px;
-  height: 50px;
   position: absolute;
   transform-origin: center center;
   transition: transform 0.2s, top 0.2s, left 0.2s;
   filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));
 }
 
+/* ガラス光沢 */
 .block::after {
   content: "";
   position: absolute;
@@ -114,6 +113,7 @@ body {
   pointer-events: none;
 }
 
+/* ガラス模様 */
 .block::before {
   content: "";
   position: absolute;
@@ -129,37 +129,14 @@ body {
   pointer-events: none;
 }
 
-/* 三角形 */
-.tri1 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-top: 50px solid #0a3d62;
-  border-right: 50px solid transparent;
-}
-
+/* 三角形（JS がサイズを上書きする） */
+.tri1,
 .tri2 {
   position: absolute;
   top: 0;
   left: 0;
   width: 0;
   height: 0;
-  border-bottom: 50px solid #60a3bc;
-  border-left: 50px solid transparent;
-}
-
-/* 割れエフェクト */
-.crack {
-  animation: crack 0.35s ease-out forwards;
-  filter: drop-shadow(0 0 10px #8cf);
-}
-
-@keyframes crack {
-  0%   { transform: scale(1) rotate(var(--angle)); opacity: 1; }
-  40%  { transform: scale(1.4) rotate(var(--angle)); opacity: 1; }
-  100% { transform: scale(2.0) rotate(var(--angle)); opacity: 0; }
 }
 
 /* ============================
@@ -198,24 +175,4 @@ body {
   font-size: 28px;
   font-weight: bold;
   margin-top: 4px;
-}
-
-/* ============================
-   スマホ版（中央に固定）
-============================ */
-@media (max-width: 480px) {
-
-  body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* スマホでも 300×400 のまま中央に表示 */
-  #game-wrapper,
-  #game {
-    width: 300px;
-    height: 400px;
-  }
 }
