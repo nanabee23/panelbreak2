@@ -197,19 +197,21 @@ body {
 /* スマホでゲーム盤を画面幅いっぱいに拡大 */
 @media (max-width: 480px) {
 
+  /* ゲーム盤の固定サイズを解除 */
   #game {
-    width: 100vw;
-    height: calc(100vw * (400 / 300)); /* 元の縦横比 300×400 を維持 */
+    width: 300px !important;
+    height: 400px !important;
   }
 
+  /* wrapper を拡大（これが見た目を大きくする） */
   #game-wrapper {
-    width: 100vw;
-    height: calc(100vw * (400 / 300));
+    transform: scale(calc(100vw / 300));
+    transform-origin: top left;
   }
 
-  /* HUD の位置調整（必要なら） */
-  #hud-top {
-    top: -60px;
-    transform: translateX(-50%) scale(0.9);
+  /* wrapper の実寸を確保（scale が効くようにする） */
+  #game-wrapper {
+    width: 300px;
+    height: 400px;
   }
 }
