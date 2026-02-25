@@ -212,7 +212,6 @@ body {
 ============================ */
 @media (max-width: 480px) {
 
-  /* スマホ時は body のレイアウトを完全リセット */
   html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -220,14 +219,14 @@ body {
     height: auto !important;
     display: block !important;
     overflow-x: hidden !important;
-    position: static !important;
   }
 
-  /* wrapper を左上に固定してから拡大 */
   #game-wrapper {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
+
+    /* transform を最優先で適用 */
     transform: scale(calc(100vw / 300)) !important;
     transform-origin: top left !important;
   }
