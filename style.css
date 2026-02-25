@@ -214,3 +214,11 @@ body {
     left: 0 !important;
   }
 }
+#hud-top,
+#combo-ui {
+  z-index: 10;   /* ← ゲーム盤より前に出す */
+}
+
+#game {
+  z-index: 1;    /* ← HUD より後ろにする */
+}
