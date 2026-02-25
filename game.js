@@ -1,4 +1,4 @@
-/* PanelBreak game.js（スマホ横幅いっぱい対応・制限時間60秒版） */
+/* PanelBreak game.js（スマホ横幅いっぱい対応・完全版） */
 
 const COLS = 6;
 const ROWS = 8;
@@ -7,7 +7,8 @@ const BASE_SIZE = 50;   // 元の1パネルサイズ
 const BASE_W = 300;     // 元の盤面幅
 const BASE_H = 400;     // 元の盤面高さ
 
-let SIZE = BASE_SIZE;   // 実際に使うパネルサイズ（スケール後）
+let SIZE = BASE_SIZE;   // スケール後のパネルサイズ
+let scale = 1;
 
 /* DOM */
 const gameWrapper = document.getElementById("game-wrapper");
@@ -22,8 +23,6 @@ const hudTop = document.getElementById("hud-top");
 const comboUI = document.getElementById("combo-ui");
 
 /* スマホ用スケール */
-let scale = 1;
-
 function setupScale() {
   const isMobile = window.innerWidth <= 480;
 
@@ -46,6 +45,34 @@ function setupScale() {
   comboUI.style.top = `${-40 * scale}px`;
 }
 
+/* 既存パネルの再スケール（これがズレ解消の決定打） */
+function rescaleAllBlocks() {
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      const b = grid[y][x];
+      if (!b) continue;
+
+      b.style.width = `${SIZE}px`;
+      b.style.height = `${SIZE}px`;
+      b.style.left = `${x * SIZE}px`;
+      b.style.top  = `${y * SIZE}px`;
+
+      const t1 = b.querySelector(".tri1");
+      const t2 = b.querySelector(".tri2");
+
+      if (t1) {
+        t1.style.borderTop = `${SIZE}px solid #0a3d62`;
+        t1.style.borderRight = `${SIZE}px solid transparent`;
+      }
+      if (t2) {
+        t2.style.borderBottom = `${SIZE}px solid #60a3bc`;
+        t2.style.borderLeft = `${SIZE}px solid transparent`;
+      }
+    }
+  }
+}
+
+/* スケール適用 → 初期化 → 再スケール */
 setupScale();
 
 /* ゲーム状態 */
@@ -128,7 +155,6 @@ function createBlock(x, y) {
   const div = document.createElement("div");
   div.className = "block";
 
-  // スケール後の座標とサイズ
   div.style.left = `${x * SIZE}px`;
   div.style.top = `${y * SIZE}px`;
   div.style.width = `${SIZE}px`;
@@ -246,6 +272,7 @@ function endGame() {
 }
 
 init();
+rescaleAllBlocks();  // ← これがズレ解消の本命
 startGameTimer();
 
 /* 連鎖ゲージ開始 */
@@ -425,6 +452,7 @@ function pointerEnd(x, y) {
     let ty = startCellY;
     if (absX > absY) tx += dx > 0 ? 1 : -1;
     else ty += dy > 0 ? 1 : -1;
+
     if (tx >= 0 && tx < COLS && ty >= 0 && ty < ROWS) {
       swapBlocks(startCellX, startCellY, tx, ty);
       setTimeout(() => resolveForCells([[startCellX, startCellY], [tx, ty]]), 250);
@@ -483,3 +511,4 @@ game.addEventListener("touchend", e => {
   const t = e.changedTouches[0];
   pointerEnd(t.clientX, t.clientY);
 }, { passive: false });
+
