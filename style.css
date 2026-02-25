@@ -212,25 +212,23 @@ body {
 ============================ */
 @media (max-width: 480px) {
 
-  /* PC の中央寄せレイアウトを完全に解除 */
-  body {
-    margin: 0;
-    padding: 0;
-    display: block !important;   /* ← これが最重要 */
+  /* スマホ時は body のレイアウトを完全リセット */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
     height: auto !important;
+    display: block !important;
+    overflow-x: hidden !important;
+    position: static !important;
   }
 
   /* wrapper を左上に固定してから拡大 */
   #game-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: scale(calc(100vw / 300));
-    transform-origin: top left;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: scale(calc(100vw / 300)) !important;
+    transform-origin: top left !important;
   }
 }
-html {
-  width: 100%;
-  height: auto;
-}
-
