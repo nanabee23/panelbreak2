@@ -194,3 +194,10 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
+/* スマホで自動拡大 */
+@media (max-width: 480px) {
+  #game-wrapper {
+    transform: scale(calc(100vw / 300));
+    transform-origin: top center;
+  }
+}
