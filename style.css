@@ -8,10 +8,13 @@ body {
   height: 100vh;
   font-family: system-ui, sans-serif;
   color: #fff;
+  overflow-x: hidden; /* スマホで横スクロール防止 */
 }
 
 #game-wrapper {
   position: relative;
+  width: 300px;
+  height: 400px;
 }
 
 /* ゲーム盤 */
@@ -194,24 +197,21 @@ body {
   font-weight: bold;
   margin-top: 4px;
 }
-/* スマホでパネルを画面幅いっぱいに拡大 */
+
+/* ============================
+   スマホ拡大（安定版）
+   transform は wrapper 1 箇所だけ
+============================ */
 @media (max-width: 480px) {
 
-  /* ゲーム盤の固定サイズはそのまま */
-  #game {
+  #game-wrapper {
     width: 300px;
     height: 400px;
-    position: relative;
-  }
-
-  /* パネル全体を拡大（これが最重要） */
-  #game .block {
-    transform: scale(calc(100vw / 300)) translateZ(0);
+    transform: scale(calc(100vw / 300));
     transform-origin: top left;
   }
 
-  /* パネルの位置計算は JS の left/top のまま使う */
-  #game {
-    overflow: visible;
+  body {
+    overflow-x: hidden;
   }
 }
