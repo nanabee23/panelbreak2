@@ -156,11 +156,14 @@ body {
 #game-over-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  color: white;
+  font-size: 24px;
+  z-index: 99999; /* ← タイトル画面より前に出す */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
@@ -221,4 +224,29 @@ body {
 
 #game {
   z-index: 1;    /* ← HUD より後ろにする */
+}
+#title-screen {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 9999;
+}
+
+#title-screen h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+#title-screen button {
+  font-size: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #444;
+  color: #fff;
 }

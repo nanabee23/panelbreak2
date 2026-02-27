@@ -44,7 +44,36 @@ function setupScale() {
   hudTop.style.top = `${0 * scale}px`;
   comboUI.style.top = `${40 * scale}px`;
 }
+let mode = "none";
 
+function startGame(selectedMode) {
+  mode = selectedMode;
+
+  // タイトル画面を消す
+  document.getElementById("title-screen").style.display = "none";
+
+  // スケール適用
+  setupScale();
+
+  // ゲーム初期化
+  init();
+
+  // HUD の位置
+  hudTop.style.top = `${0 * scale}px`;
+  comboUI.style.top = `${40 * scale}px`;
+
+  // タイムアタック
+  if (mode === "timeattack") {
+    timeLeft = 60;
+    startGameTimer();
+  }
+
+  // エンドレス
+  if (mode === "endless") {
+    timeLeft = Infinity;
+    timerUI.textContent = "∞";
+  }
+}
 /* 既存パネルの再スケール（これがズレ解消の決定打） */
 function rescaleAllBlocks() {
   for (let y = 0; y < ROWS; y++) {
@@ -73,7 +102,7 @@ function rescaleAllBlocks() {
 }
 
 /* スケール適用 → 初期化 → 再スケール */
-setupScale();
+// setupScale();
 
 /* ゲーム状態 */
 let grid = [];
@@ -271,13 +300,13 @@ function endGame() {
   gameOverOverlay.classList.add("show");
 }
 
-init();
+// init();
 // ★ HUD の位置を再スケール（これが見えない原因の本命）
-hudTop.style.top = `${0 * scale}px`;
-comboUI.style.top = `${40 * scale}px`;
+// hudTop.style.top = `${0 * scale}px`;
+// comboUI.style.top = `${40 * scale}px`;
 
 
-startGameTimer();
+// startGameTimer();
 
 /* 連鎖ゲージ開始 */
 function startComboGauge() {
@@ -447,7 +476,7 @@ function pointerMove(x, y) {
 }
 
 function pointerEnd(x, y) {
-  if (!dragging || gameEnded) return;
+  if (!dragging || gameEnded || busy) return;  // ★ busy を追加
   dragging = false;
 
   const dx = x - startX;
@@ -470,24 +499,33 @@ function pointerEnd(x, y) {
   }
 
   /* タップ（回転） */
-  if (!moved) {
-    const b = grid[startCellY][startCellX];
-    let state = JSON.parse(b.dataset.state);
-    state = rotateState(state);
-    b.dataset.state = JSON.stringify(state);
+/* タップ（回転） */
+if (!moved) {
+  const b = grid[startCellY][startCellX];
+  let state = JSON.parse(b.dataset.state);
+  state = rotateState(state);
+  b.dataset.state = JSON.stringify(state);
 
-    let step = parseInt(b.dataset.step, 10);
-    if (isNaN(step)) step = 0;
-    step = (step + 1) & 3;
-    b.dataset.step = String(step);
+  let step = parseInt(b.dataset.step, 10);
+  if (isNaN(step)) step = 0;
+  step = (step + 1) & 3;
+  b.dataset.step = String(step);
 
-    let rot = parseInt(b.dataset.rot, 10) || 0;
-    rot += 90;
-    b.dataset.rot = rot;
-    b.style.transform = `rotate(${rot}deg)`;
+  let rot = parseInt(b.dataset.rot, 10) || 0;
+  rot += 90;
+  b.dataset.rot = rot;
+  b.style.transform = `rotate(${rot}deg)`;
 
-    setTimeout(() => resolveForCells([[startCellX, startCellY]]), 250);
-  }
+  // ★ busy が false になるまで待ってから resolveForCells を実行
+  const waitResolve = () => {
+    if (busy) {
+      requestAnimationFrame(waitResolve);
+    } else {
+      resolveForCells([[startCellX, startCellY]]);
+    }
+  };
+  waitResolve();
+}
 }
 
 /* PC入力 */
@@ -521,3 +559,26 @@ game.addEventListener("touchend", e => {
   pointerEnd(t.clientX, t.clientY);
 }, { passive: false });
 
+document.getElementById("retry-button").onclick = () => {
+  gameOverOverlay.classList.remove("show");
+  startGame(mode);
+};
+
+document.getElementById("back-to-title").onclick = () => {
+  gameOverOverlay.classList.remove("show");
+
+  // 盤面をクリア
+  while (game.firstChild) {
+    game.removeChild(game.firstChild);
+  }
+
+  // タイトル画面を再表示
+  document.getElementById("title-screen").style.display = "flex";
+
+  // 状態リセット
+  score = 0;
+  combo = 0;
+  busy = false;
+  gameEnded = false;
+  timerUI.textContent = "0.0";
+};
